@@ -30,7 +30,7 @@ function updateClimateData() {
 
 setInterval(function () {
     // console.log('updateSpeedTestData');
-    updateClimateDataData();
+    updateClimateData();
 }, 6000);
 
 
