@@ -123,6 +123,27 @@
     </div>
   </div>
  <?php } ?>
+ 
+ <?php  if($climateshedule){ ?>
+  <div class="row">
+    <div class="col-md-12">
+    <div class="box" id="queries-over-time">
+        <div class="box-header with-border">
+          <h3 class="box-title">Climate results over last <?php echo htmlspecialchars($climatedays); ?></h3>
+        </div>
+        <div class="box-body">
+          <div class="chart">
+          <canvas id="climateChart" width="800" height="140"></canvas>
+          </div>
+        </div>
+        <div class="overlay">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <!-- /.box-body -->
+      </div>
+    </div>
+  </div>
+ <?php } ?>
 
 <div class="row">
     <div class="col-md-12">
@@ -378,4 +399,5 @@ else
 
 <script src="scripts/pi-hole/js/index.js"></script>
 <script src="scripts/pi-hole/js/speedtest.js"></script>
+<script src="scripts/pi-hole/js/climate.js"></script>
 <script src="scripts/vendor/moment.min.js"></script>

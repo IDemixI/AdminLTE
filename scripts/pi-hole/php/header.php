@@ -165,6 +165,18 @@
   	}else {
   	    $speedtestdays  = "24 Hours";
   	}
+	if(isset($setupVars["CLIMATESCHEDULE"]))
+  	{
+  		  $climateshedule = $setupVars["CLIMATESCHEDULE"];
+  	}else {
+  	    $climateshedule  = false;
+  	}
+    if(isset($setupVars["CLIMATE_CHART_DAYS"]))
+  	{
+  		  $climatedays = $setupVars["CLIMATE_CHART_DAYS"]." Days";
+  	}else {
+  	    $climatedays  = "24 Hours";
+  	}
     $piholeFTLConfFile = "/etc/pihole/pihole-FTL.conf";
     if(is_readable($piholeFTLConfFile))
     {
@@ -451,6 +463,12 @@ if($auth) {
                 <li<?php if($scriptname === "speedtest.php"){ ?> class="active"<?php } ?>>
                     <a href="speedtest.php">
                         <i class="fa fa-tachometer-alt"></i> <span>Speedtest</span>
+                    </a>
+                </li>
+                <!-- Climate -->
+                <li<?php if($scriptname === "climate.php"){ ?> class="active"<?php } ?>>
+                    <a href="climate.php">
+                        <i class="fas fa-thermometer-half"></i> <span>Climate</span>
                     </a>
                 </li>
 

@@ -1,4 +1,4 @@
-var speedlabels = [], downloadspeed = [], uploadspeed = [], speeddata = [], serverPing = [];
+var climatelabels = [], temperature = [], humidity = [], climatedata = [];
 
 function updateClimateData() {
 
@@ -14,17 +14,16 @@ function updateClimateData() {
 
         results.forEach(function (packet) {
             // console.log(speedlabels.indexOf(formatDate(packet.start_time)));
-            if (speedlabels.indexOf(formatDate(packet.start_time)) === -1) {
-                speedlabels.push(formatDate(packet.start_time));
-                uploadspeed.push(parseFloat(packet.upload));
-                downloadspeed.push(parseFloat(packet.download));
-                serverPing.push(parseFloat(packet.server_ping));
+            if (climatelabels.indexOf(formatDate(packet.timestamp)) === -1) {
+                climatelabels.push(formatDate(packet.timestamp));
+                temperature.push(parseFloat(packet.temperature));
+                humidity.push(parseFloat(packet.humidity));
 
             }
 
         });
-        speedChart.update();
-        speeddata = results;
+        climateChart.update();
+        climatedata = results;
     });
 }
 
@@ -35,14 +34,14 @@ setInterval(function () {
 }, 6000);
 
 
-var speedChartctx = document.getElementById("speedtestChart");
-var speedChart = new Chart(speedChartctx, {
+var climateChartctx = document.getElementById("climateChart");
+var climateChart = new Chart(climateChartctx, {
     type: 'line',
     data: {
-        labels: speedlabels,
+        labels: climatelabels,
         datasets: [{
-            label: 'Download Mbps',
-            data: downloadspeed,
+            label: 'Temperature',
+            data: temperature,
             backgroundColor: 'rgba(75, 192, 192, 0.1)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1,
@@ -50,21 +49,12 @@ var speedChart = new Chart(speedChartctx, {
             yAxisID: "y-axis-1"
         },
             {
-                label: 'Upload Mbps',
-                data: uploadspeed,
+                label: 'Humidity',
+                data: humidity,
                 backgroundColor: 'rgba(255, 99, 132, 0.1)',
                 borderColor: 'rgba(255,99,132,1)',
                 borderWidth: 1,
                 yAxisID: "y-axis-1"
-            },
-            {
-                label: 'Ping ms',
-                data: serverPing,
-                backgroundColor: 'rgba(69,237,33,0.0)',
-                borderColor: 'rgba(69,237,33,1)',
-                borderWidth: 1,
-                borderDash: [5, 5],
-                yAxisID: "y-axis-2"
             }
 
         ]
@@ -84,17 +74,7 @@ var speedChart = new Chart(speedChartctx, {
                 ticks : {
                     min: 0
                 }
-            },
-                {
-                    type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                    display: true,
-                    position: "right",
-                    id: "y-axis-2",
-                    ticks : {
-                        min: 0
-                    }
-                }
-            ],
+            }],
             xAxes: [
                 {
                     // type :'time',

@@ -61,6 +61,21 @@
     {
         $data = array_merge($data,  getAllSpeedTestData($dbSpeedtest));
     }
+	
+	if (isset($_GET['getClimateData24hrs'])  && $auth)
+    {
+        $data = array_merge($data,  getClimateData24hrs($dbClimate));
+    }
+
+    if (isset($_GET['getLastClimateResult'])  && $auth)
+    {
+        $data = array_merge($data,  getLastClimateResult($dbClimate));
+    }
+
+    if (isset($_GET['getAllClimateData'])  && $auth)
+    {
+        $data = array_merge($data,  getAllClimateData($dbClimate));
+    }
 
     if (isset($_GET['topItems']) && $auth) {
         $data = array_merge($data,  getTopItems($_GET['topItems']));

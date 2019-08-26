@@ -509,6 +509,30 @@ function readAdlists()
                 $success .= "The Speedtest settings have been updated";
                 break;
 
+            case "climate":
+
+                if (isset($_POST["climateschedule"])) {
+                    exec('sudo pihole -a -ci ' . $_POST["climateschedule"]);
+                } else {
+                    // # code...
+                }
+
+                if (isset($_POST["clearclimates"])) {
+                    if ($_POST["clearclimates"] == "yes")
+                        exec('sudo pihole -a -cc');
+                } else {
+                    // # code...
+                }
+
+                if (isset($_POST["climatedays"])) {
+                    exec('sudo pihole -a -cd ' . $_POST["climatedays"]);
+                } else {
+                    // # code...
+                }
+
+                $success .= "The Climate settings have been updated";
+                break;
+				
 			case "webUI":
 				if($_POST["tempunit"] == "F")
 				{
@@ -543,7 +567,6 @@ function readAdlists()
 				{
 					exec('sudo pihole -a layout traditional');
 				}
-
 
 				$success .= "The webUI settings have been updated";
 				break;

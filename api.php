@@ -132,6 +132,7 @@ elseif (isset($_GET['list']))
 // Other API functions
 require("api_FTL.php");
 require("api_speedtest.php");
+require("api_climate.php");
 if(isset($_GET["jsonForceObject"]))
 {
 	echo json_encode($data, JSON_FORCE_OBJECT);

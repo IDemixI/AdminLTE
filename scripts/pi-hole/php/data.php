@@ -27,8 +27,11 @@
     $blackListFile = checkfile("/etc/pihole/blacklist.txt");
     $blacklist = new \SplFileObject($blackListFile);
 
-    // speedtst DB
+    // speedtest DB
     $dbSpeedtest ="/etc/pihole/speedtest.db";
+
+    // climate DB
+    $dbClimate ="/etc/pihole/climate.db";
 
     if(isset($setupVars["API_PRIVACY_MODE"]))
     {
@@ -118,6 +121,9 @@
             'ads_over_time' => $ads_over_time,
         );
     }
+	
+	// Speedtest related functions
+	
     function getAllSpeedTestData($dbSpeedtest)
     {
       $data = getSpeedTestData($dbSpeedtest,-1);
@@ -227,6 +233,115 @@
       return $dataFromSpeedDB;
     }
 
+	// Climate related functions
+
+    function getAllClimateData($dbClimate)
+    {
+      $data = getClimateData($dbClimate,-1);
+      if($data['errr'])
+        return [];
+      $newarr = array();
+      foreach ($data as  $array) {
+          array_push($newarr,array_values($array));
+      }
+        return  array('data' => $newarr );
+    }
+
+    function getLastClimateResult($dbClimate){
+            if(!file_exists($dbClimate)){
+                // create db if not exists
+                exec('sudo pihole -a -cn');
+                return array();
+            }
+
+            $db = new SQLite3($dbClimate);
+            if(!$db) {
+                return array("error"=>"Unable to open DB");
+            } else {
+                // return array("status"=>"success");
+            }
+
+            $curdate = date('Y-m-d H:i:s');
+            $date = new DateTime();
+            $date->modify('-'.$durationdays.' day');
+            $start_date =$date->format('Y-m-d H:i:s');
+
+            $sql ="SELECT * from climate order by id DESC limit 1";
+
+            $dbResults = $db->query($sql);
+
+            $dataFromClimateDB= array();
+
+
+            if(!empty($dbResults)){
+                while($row = $dbResults->fetchArray(SQLITE3_ASSOC) ) {
+                    array_push($dataFromClimateDB, $row);
+                }
+                return($dataFromClimateDB);
+            }
+            else{
+                return array("error"=>"No Results");
+            }
+            $db->close();
+    }
+
+    function getClimateData($dbClimate,$durationdays="1")
+    {
+            if(!file_exists($dbClimate)){
+                // create db if not exists
+                exec('sudo pihole -a -cn');
+                return array();
+            }
+            $db = new SQLite3($dbClimate);
+            if(!$db) {
+                return array("error"=>"Unable to open DB");
+            } else {
+                // return array("status"=>"success");
+            }
+
+            $curdate = date('Y-m-d H:i:s');
+            $date = new DateTime();
+            $date->modify('-'.$durationdays.' day');
+            $timestamp =$date->format('Y-m-d H:i:s');
+
+            if($durationdays == -1)
+            {
+				$sql ="SELECT * from climate order by id asc";
+            }
+            else
+			{
+				$sql ="SELECT * FROM climate WHERE timestamp between '${timestamp}' and  '${curdate}'  order by id asc;";
+            }
+
+            $dbResults = $db->query($sql);
+
+            $dataFromClimateDB= array();
+
+            if(!empty($dbResults)){
+                while($row = $dbResults->fetchArray(SQLITE3_ASSOC) ) {
+                  array_push($dataFromClimateDB, $row);
+                }
+                return($dataFromClimateDB);
+            }
+            else{
+               return array("error"=>"No Results");
+            }
+            $db->close();
+    }
+
+
+    function getClimateData24hrs($dbClimate){
+      global $log, $setupVars;
+      if(isset($setupVars["CLIMATE_CHART_DAYS"]))
+      {
+        $dataFromClimateDB = getClimateData($dbClimate,$setupVars["CLIMATE_CHART_DAYS"]);
+      }
+      else{
+        $dataFromClimateDB = getClimateData($dbClimate);
+      }
+
+      return $dataFromClimateDB;
+    }
 
     // Test if variable exists and is positive
     function ispositive(&$arg)

@@ -224,7 +224,7 @@ if (isset($setupVars["API_PRIVACY_MODE"])) {
 ?>
 
 <?php
-if (isset($_GET['tab']) && in_array($_GET['tab'], array("sysadmin", "blocklists", "dns", "piholedhcp", "api", "privacy", "teleporter","speedtest"))) {
+if (isset($_GET['tab']) && in_array($_GET['tab'], array("sysadmin", "blocklists", "dns", "piholedhcp", "api", "privacy", "teleporter","speedtest","climate"))) {
     $tab = $_GET['tab'];
 } else {
     $tab = "sysadmin";
@@ -242,6 +242,7 @@ if (isset($_GET['tab']) && in_array($_GET['tab'], array("sysadmin", "blocklists"
                 <li<?php if($tab === "privacy"){ ?> class="active"<?php } ?>><a data-toggle="tab" href="#privacy">Privacy</a></li>
                 <li<?php if($tab === "teleporter"){ ?> class="active"<?php } ?>><a data-toggle="tab" href="#teleporter">Teleporter</a></li>
                 <li<?php if($tab === "speedtest"){ ?> class="active"<?php } ?>><a data-toggle="tab" href="#speedtest">Speedtest</a></li>
+                <li<?php if($tab === "climate"){ ?> class="active"<?php } ?>><a data-toggle="tab" href="#climate">Climate</a></li>
             </ul>
             <div class="tab-content">
                 <!-- ######################################################### Blocklists ######################################################### -->
@@ -1402,6 +1403,25 @@ if (isset($_GET['tab']) && in_array($_GET['tab'], array("sysadmin", "blocklists"
                 }
                 ?>
 
+                <!-- ######################################################### Climate ######################################################### -->
+                <?php
+
+                // Fix for select for not population on save
+                if(isset($setupVars["CLIMATESCHEDULE"]))
+                {
+                    $climateshedule = $setupVars["CLIMATESCHEDULE"];
+                }else {
+                    $climateshedule  = false;
+                }
+
+                if(isset($setupVars["CLIMATE_CHART_DAYS"]))
+                {
+                    $climatedays = $setupVars["CLIMATE_CHART_DAYS"];
+                }else {
+                    $climatedays  = "1";
+                }
+
+                ?>
 
                 <!-- ######################################################### Speedtest ######################################################### -->
                 <div id="speedtest" class="tab-pane fade<?php if($tab === "speedtest"){ ?> in active<?php } ?>">
@@ -1475,9 +1495,65 @@ if (isset($_GET['tab']) && in_array($_GET['tab'], array("sysadmin", "blocklists"
                     </div>
                 </div>
 
+                <div id="climate" class="tab-pane fade<?php if($tab === "climate"){ ?> in active<?php } ?>">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form role="form" method="post">
+                                <input type="hidden" name="field" value="climate">
+                                <input type="hidden" name="token" value="<?php echo $token ?>">
+                                <div class="box box-warning">
+                                    <div class="box-header with-border">
+
+                                        <h3 class="box-title">Climate settings</h3>
+
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Climate</h4>
+                                                <div class="form-group col-md-6">
+                                                    <label>Climate Schedule</label>
+                                                    <select name="climateschedule" class="form-control" >
+                                                        <option value="0" <?php if($climateschedule == 0) {?> selected <?php } ?>>Disabled</option>
+                                                        <option value="1" <?php if($climateschedule == 1) {?> selected <?php } ?>>Every 1 Hour</option>
+                                                        <option value="2" <?php if($climateschedule == 2) {?> selected <?php } ?>>Every 2 Hours</option>
+                                                        <option value="4" <?php if($climateschedule == 4) {?> selected <?php } ?>>Every 4 Hours</option>
+                                                        <option value="6" <?php if($climateschedule == 6) {?> selected <?php } ?>>Every 6 Hours</option>
+                                                        <option value="12" <?php if($climateschedule == 12) {?> selected <?php } ?>>Every 12 Hours</option>
+                                                        <option value="24" <?php if($climateschedule == 24) {?> selected <?php } ?>>Every 24 Hours</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Climate Display Range</label>
+                                                    <select name="climatedays" class="form-control" >
+                                                        <option value="1" <?php if($climatedays == 1) {?> selected <?php } ?>>1 Day</option>
+                                                        <option value="2" <?php if($climatedays == 2) {?> selected <?php } ?>>2 Days</option>
+                                                        <option value="4" <?php if($climatedays == 4) {?> selected <?php } ?>>4 Days</option>
+                                                        <option value="7" <?php if($climatedays == 7) {?> selected <?php } ?>>7 Days</option>
+                                                        <option value="30" <?php if($climatedays == 30) {?> selected <?php } ?>>30 Days</option>
+                                                    </select>
+                                                </div>
+                                                <h4>Flush Climate history </h4>
+                                                <div class="form-group col-md-12">
+
+                                                    <div class="form-group">
+                                                        <div class="checkbox text-danger" ><label><input type="checkbox"  name="clearclimates" value="yes"> Flush Climate history</label></div>
+                                                    </div>
+                                                </div>
 
 
-
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-footer clearfix">
+                                        <button type="submit" class="btn btn-primary pull-right">Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>

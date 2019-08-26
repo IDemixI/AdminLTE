@@ -63,12 +63,6 @@ $(document).ready(function() {
         "columns": [
             null,
             { "render": function (data, type, full, meta) { if(type === "display"){return moment(data).format("Y-MM-DD HH:mm:ss z");}else{return data;} }},
-            { "render": function (data, type, full, meta) { if(type === "display"){return moment(data).format("Y-MM-DD HH:mm:ss z");}else{return data;} }},
-            null ,
-            null,
-            null,
-            null,
-            null,
             null,
             null,
             {"render" : function (data, type, full, meta) { data = '<a target="_blank" href="' + data + '"> View Result</a>'; return data; }},
