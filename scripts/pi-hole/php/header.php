@@ -468,7 +468,7 @@ if($auth) {
                 <!-- Climate -->
                 <li<?php if($scriptname === "climate.php"){ ?> class="active"<?php } ?>>
                     <a href="climate.php">
-                        <i class="fas fa-thermometer-half"></i> <span>Climate</span>
+                        <i class="fa fa-thermometer-half" style="text-align:center;"></i> <span>Climate</span>
                     </a>
                 </li>
 
